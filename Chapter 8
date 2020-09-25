@@ -1,0 +1,63 @@
+*** School Scheduling Database***
+***1. Display buildings and all the classrooms in each building. (Hint: The solution requires a JOIN of two tables.)
+You can find the solution in CH08_Buildings_Classrooms (47 rows).***
+
+SELECT buildings.BuildingName, buildings.BuildingCode
+FROM buildings
+JOIN class_rooms on buildings.BuildingCode = class_rooms.BuildingCode
+
+
+***2. “List students and all the classes in which they are currently enrolled.”
+(Hint: The solution requires a JOIN of more than two tables.)
+You can find the solution in CH08_Student_Enrollments (50 rows).***
+
+SELECT concat(students.StudFirstName, ' ', students.StudLastName), subjects.SubjectName
+FROM (((students
+JOIN student_schedules on students.studentID = student_schedules.StudentID)
+JOIN classes on student_schedules.classid = classes.classid)
+JOIN subjects on classes.subjectID = subjects.subjectID)
+
+
+***3. “List the faculty staff and the subject each teaches.”***
+SELECT concat (staff.StfFirstName, ' ', staff.StfLastName) AS 'Teacher', subjects.SubjectName AS 'Subkect'
+FROM (((staff
+JOIN faculty ON staff.staffID = faculty.staffID)
+JOIN faculty_subjects ON faculty_subjects.staffID = staff.staffID)
+JOIN subjects ON faculty_subjects.subjectid = subjects.subjectID)
+
+
+***Bowling League Database***
+***1. “List the bowling teams and all the team members.”***
+SELECT concat (bowlers.BowlerFirstName, ' ', bowlers.BowlerLastName) AS 'Bowler', teams.TeamName AS 'Team'
+FROM bowlers
+JOIN teams ON bowlers.teamID = teams.teamID
+
+
+
+***2. “Display the bowlers, the matches they played in, and the bowler game scores.”***
+SELECT concat(bowlers.BowlerFirstName, ' ', bowlers.BowlerLastName) AS 'Bowler', bowler_scores.RawScore, match_games.MatchID, match_games.GameNumber
+FROM ((Bowlers
+JOIN bowler_scores on bowlers.BowlerID = bowler_scores.BowlerID)
+JOIN match_games on bowler_scores.MatchID = match_games.MatchID)
+
+
+
+***Recipes Databases***
+***1. “List all the recipes for salads.”***
+
+SELECT recipes.RecipeTitle, recipe_classes.RecipeClassDescription
+FROM recipes
+JOIN recipe_classes on recipes.RecipeClassID = recipe_classes.RecipeClassID
+WHERE recipe_classes.RecipeClassID = '4'
+
+
+***2. “List all recipes that contain a dairy ingredient.”***
+SELECT DISTINCT recipes.RecipeTitle
+FROM (((Recipes 
+JOIN Recipe_Ingredients
+ON recipes.RecipeID = recipe_ingredients.RecipeID)
+JOIN Ingredients 
+ON recipe_ingredients.IngredientID = ingredients.IngredientID)
+JOIN Ingredient_Classes
+ON ingredients.IngredientClassID = ingredient_classes.IngredientClassID)
+WHERE ingredient_classes.IngredientClassDescription LIKE '%Dairy%';
